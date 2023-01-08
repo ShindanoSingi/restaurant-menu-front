@@ -12,7 +12,6 @@ function MenuList() {
 
     useEffect(() => {
         retrieveAllMenus();
-        console.log(countRef)
     }, [countRef]);
 
     const retrieveAllMenus = () => {
@@ -30,6 +29,7 @@ function MenuList() {
 
     const deleteMenu = (id) => {
         axios.delete(`${baseURL}/menu/${id}`)
+        console.log(`${baseURL}/menu/${id}`)
             .then((response) => {
                 setDeleted(true);
                 retrieveAllMenus();
@@ -64,13 +64,13 @@ function MenuList() {
                 )}
                 {menus &&
                     menus.map((menu, index) => (
-                        <div key={index} className="card my-3 min-w-30 mx-auto">
+                        <div key={index} className="card my-3 w-25 mx-auto">
                             <div className="card-body">
                                 <h2 className="card-title font-weight-bold">{menu.name}</h2>
                                 <h4 className="card-subtitle mb-2">{menu.price}</h4>
                                 <p className="card-text">{menu.description}</p>
                             </div>
-                            <div className="card-footer">
+                            <div classNameName="card-footer">
                                 <div
                                     className="btn-group justify-content-around w-75 mb-1 "
                                     data-toggle="buttons"

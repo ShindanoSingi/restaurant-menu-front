@@ -1,29 +1,51 @@
 import axios from "axios";
-import React, { useState } from "react";
-import { baseURL, headers } from './services/menu.service'
-function AddMenu() {
+import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
+import { baseURL, headers } from "./services/menu.service";
+export default UpdateMenu = () => {
     const initialMenuState = {
         id: null,
         name: "",
         description: "",
         price: 0,
     };
-    const [menu, setMenu] = useState(initialMenuState);
+    let { id } = useParams();
+    const [currentMenu, setCurrentMenu] = useState(initialMenuState);
     const [submitted, setSubmitted] = useState(false);
+    const countRef = useRef(0);
+    useEffect(() => {
+        retrieveMenu();
+    }, [countRef]);
     const handleMenuChange = (e) => {
         const { name, value } = e.target;
-        setMenu({ ...menu, [name]: value });
+        setCurrentMenu({ ...currentMenu, [name]: value });
     };
-    const submitMenu = () => {
+    const retrieveMenu = () => {
+        axios
+            .get(`${baseURL}/menu/${id}/`)
+            .then((response) => {
+                setCurrentMenu({
+                    id: response.data.id,
+                    name: response.data.name,
+                    description: response.data.description,
+                    price: response.data.price,
+                });
+                console.log(currentMenu);
+            })
+            .catch((e) => {
+                console.error(e);
+            });
+    };
+    const updateMenu = () => {
         let data = {
-            name: menu.name,
-            description: menu.description,
-            price: menu.price,
+            name: currentMenu.name,
+            description: currentMenu.description,
+            price: currentMenu.price,
         };
         axios
-            .post(`${baseURL}/menu/`, data)
+            .put(`${baseURL}/menu/${id}/`, data)
             .then((response) => {
-                setMenu({
+                setCurrentMenu({
                     id: response.data.id,
                     name: response.data.name,
                     description: response.data.description,
@@ -37,7 +59,7 @@ function AddMenu() {
             });
     };
     const newMenu = () => {
-        setMenu(initialMenuState);
+        setCurrentMenu(initialMenuState);
         setSubmitted(false);
     };
     return (
@@ -48,7 +70,7 @@ function AddMenu() {
                         className="alert alert-success alert-dismissible fade show"
                         role="alert"
                     >
-                        Menu Added!
+                        Menu Updated!
                         <button
                             type="button"
                             className="close"
@@ -59,7 +81,7 @@ function AddMenu() {
                         </button>
                     </div>
                     <button className="btn btn-success" onClick={newMenu}>
-                        Add
+                        Update
                     </button>
                 </div>
             ) : (
@@ -71,7 +93,7 @@ function AddMenu() {
                             className="form-control"
                             id="name"
                             required
-                            value={menu.name}
+                            value={currentMenu.name}
                             onChange={handleMenuChange}
                             name="name"
                         />
@@ -83,9 +105,10 @@ function AddMenu() {
                             className="form-control"
                             id="description"
                             required
-                            value={menu.description}
+                            value={currentMenu.description}
                             onChange={handleMenuChange}
                             name="description"
+                            default
                         />
                     </div>
                     <div className="form-group">
@@ -95,12 +118,12 @@ function AddMenu() {
                             className="form-control"
                             id="price"
                             required
-                            value={menu.price}
+                            value={currentMenu.price}
                             onChange={handleMenuChange}
                             name="price"
                         />
                     </div>
-                    <button onClick={submitMenu} className="btn btn-success">
+                    <button onClick={updateMenu} className="btn btn-success">
                         Submit
                     </button>
                 </div>
@@ -108,5 +131,3 @@ function AddMenu() {
         </div>
     );
 };
-
-export default AddMenu;

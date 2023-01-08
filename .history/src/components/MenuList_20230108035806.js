@@ -64,7 +64,7 @@ function MenuList() {
                 )}
                 {menus &&
                     menus.map((menu, index) => (
-                        <div key={index} className="card my-3 min-w-30 mx-auto">
+                        <div key={index} className="card my-3 max-w-20 mx-auto">
                             <div className="card-body">
                                 <h2 className="card-title font-weight-bold">{menu.name}</h2>
                                 <h4 className="card-subtitle mb-2">{menu.price}</h4>

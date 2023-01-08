@@ -21,7 +21,11 @@ function AddMenu() {
             price: menu.price,
         };
         axios
-            .post(`${baseURL}/menu/`, data)
+            .post(`${baseURL}/menu/`, data, {
+                headers: {
+                    headers,
+                },
+            })
             .then((response) => {
                 setMenu({
                     id: response.data.id,

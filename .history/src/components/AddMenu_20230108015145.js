@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { baseURL, headers } from './services/menu.service'
-function AddMenu() {
+export default AddMenu = () => {
     const initialMenuState = {
         id: null,
         name: "",
@@ -21,7 +21,11 @@ function AddMenu() {
             price: menu.price,
         };
         axios
-            .post(`${baseURL}/menu/`, data)
+            .post(`${baseURL}/menu/`, data, {
+                headers: {
+                    headers,
+                },
+            })
             .then((response) => {
                 setMenu({
                     id: response.data.id,
@@ -108,5 +112,3 @@ function AddMenu() {
         </div>
     );
 };
-
-export default AddMenu;
